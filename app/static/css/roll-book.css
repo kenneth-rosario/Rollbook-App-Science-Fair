@@ -1,0 +1,22 @@
+        /*  Customizing nav pills in page */
+
+        .nav-pills>li>a{
+            background-color: #337ab7;
+            color: white;
+            transition: 0.2s background-color;
+        }.nav-pills>li#Add>a{
+            background-color: #e8e7ac;
+            color: white;
+            transition: 0.2s background-color;
+        }
+
+        /* Adding animation to pills */
+        .nav-pills>li>a:focus,
+        .nav-pills>li>a:hover,
+        .nav-pills>li#Add>a:hover,
+        .nav-pills>li#Add>a:hover
+        {
+            color: #fff;
+            background-color: #d1cdcd;
+            transition: 0.2s background-color;
+        }

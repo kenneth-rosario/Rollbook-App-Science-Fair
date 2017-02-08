@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta />
+    <title>Title</title>
+
+    <link href="{{url_for('static', filename='css/bootstrap.css')}}" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/slate/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{url_for('static', filename='css/roll-book.css')}}" rel="stylesheet" type="text/css" />
+    <style>
+        .align-middle {
+            margin-top: 25%;
+            margin-bottom: 25%;
+        }
+        .bbtn{
+            margin-top:30px;
+            margin-bottom:10px;
+            padding:35px;
+            background: #466368;
+            background: linear-gradient(#648880, #293f50);
+            border-radius: 6px;
+            height: 120px;
+            color:white;
+            padding-bottom:40px;
+            transition:background 0.7s;
+        }
+        .different-color{
+            background: #636363;
+            background: linear-gradient(#4e525a, #3d4653);
+            margin-bottom:20px;
+            height:100%
+        }
+        .bbtn:hover{
+            background: #373e5e;
+            background: linear-gradient(#498061, #3d757d);
+            transition: background 0.8s
+        }
+        .info-window{
+            background: #373e5e;
+            background: linear-gradient(#498061, #3d757d);
+            height:610px;
+        }
+         .toStyle{
+         margin-top:40px;
+             background: linear-gradient(#44A08D, #093637);
+        height:140px;
+        padding:30px;
+        color:white;
+        border-radius:5px;
+        cursor:pointer;
+      }
+
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+
+    </nav>
+    <div id="app" >
+
+    </div>
+<script src="{{url_for('static', filename='bundle.js')}}"></script>
+</body>
+</html>
