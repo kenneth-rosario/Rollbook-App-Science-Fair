@@ -8,20 +8,25 @@ import * as Actions from '../../../actions/rollActions'
 export default class ViewInfo extends Component{
     constructor(props){
         super(props);
+        this.infoListen = this.infoListen.bind(this);
         this.state = {
             user: sessionManager.getCurrentUser()
         }
     }
-    componentWillMount(){
-       sessionManager.on("change", ()=>{
-           this.setState({
+    infoListen(){
+        this.setState({
                user: sessionManager.getCurrentUser()
            })
-       })
+    }
+    componentWillMount(){
+       sessionManager.on("change", this.infoListen)
+    }
+    componentWillUnmount(){
+        sessionManager.removeListener("change", this.infoListen)
     }
     render(){
         return(
-            <div className="row info-window">
+            <div className="row ">
                 <h2 className="col-xs-12">Your Information</h2>
                 <hr />
                 <InfoPart title="Full Name" attribute={this.state.user.fullname}/>

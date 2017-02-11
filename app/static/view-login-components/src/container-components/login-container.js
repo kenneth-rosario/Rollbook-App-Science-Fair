@@ -9,28 +9,8 @@ import DashBoard from '../../../view-dashboard-components/src/presentational-com
 export default class LoginContainer extends Component{
     constructor(props){
         super(props);
-        this.state ={
-            loggedIn : sessionManager.isLogedIn(),
-            currentUser : sessionManager.getCurrentUser()
-        }
     }
-    setNewState(loggedIn, currentUser){
-        this.setState({
-            loggedIn:loggedIn,
-            currentUser:currentUser
-        })
-    }
-    componentWillMount(){
-        sessionManager.on("change",()=>{
-            this.setNewState(
-                sessionManager.isLogedIn(),
-                sessionManager.getCurrentUser()
-            );
-        });
-    }
-    componentWillUnmount(){
-        sessionManager.removeListener("change",this.setNewState);
-    }
+
     render(){
         return (
             <div>

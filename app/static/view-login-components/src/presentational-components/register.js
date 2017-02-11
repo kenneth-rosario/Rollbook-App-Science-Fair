@@ -9,7 +9,8 @@ export default class Register extends Component{
     }
     render(){
         return(
-          <div className="container-fluid align-middle" style={{backgroundColor:"#89c1ff", padding:50, borderRadius:30, color:'white', maxWidth:650 }}>
+          <div className="container-fluid" style={{backgroundColor:"#89c1ff", padding:50, borderRadius:30, color:'white', maxWidth:650,
+          marginTop:70}}>
           <div className="row ">
               <h1 className="text-center" >Register Now!!</h1>
               <div className="form-group">

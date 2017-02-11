@@ -6,7 +6,8 @@ class SessionManager extends EventEmitter {
         super();
         this.current_user = JSON.parse(localStorage.getItem('jtk'));
         this.logged_in = this.current_user !== null ;
-        this.fetched_user = ""
+        this.fetched_user = "";
+        this.loading = false;
     }
     getCurrentUser(){
         return this.current_user
@@ -17,44 +18,63 @@ class SessionManager extends EventEmitter {
     setUser(object){
         console.log("Checking");
         this.current_user = object;
+        localStorage.setItem('jtk',JSON.stringify(object));
         this.emit("change")
     }
     LogIn(email, password){
+        //Prepares the information to be sent
         let the_body = {
             "email":email,
             "password":password
         };
-        console.log(email);
-        console.log(password);
+        //Fires an Ajax request to the server
         fetch('/ajax-login',{
             method:'POST',
             headers:{
                 "Content-Type":'application/json'
             },
+            //The information sent
             body:JSON.stringify(the_body)
         }).then((response)=>{
+            //if successful it will parse the Json received
            return response.json()
         }).then((Json)=>{
+            //if the above was successful set a cookie and emit change
             if(Json.status === "SUCCESS"){
                 alert("Login successful");
                 this.current_user = Json;
                 this.logged_in = true;
                 localStorage.setItem('jtk', JSON.stringify(Json));
-                this.emit("change");
+                this.HideLoadingPage();
             }else{
                 alert("wrong credentials");
+                this.HideLoadingPage();
             }
         });
+
     }
     LogOut(){
         localStorage.removeItem('jtk');
         this.current_user = null;
         this.logged_in = false;
-        this.emit("change")
+        this.emit("change");
     }
 
     GetFetchedUser(){
         return this.fetched_user;
+    }
+
+    ShowLoadingPage(){
+        this.loading = true;
+        this.emit("change")
+    }
+    HideLoadingPage(){
+        this.loading = false;
+        this.emit("change")
+    }
+
+    ReturnLogToggle(){
+        return this.loading;
     }
 
     LoadingUser() {
@@ -74,6 +94,8 @@ class SessionManager extends EventEmitter {
         console.log(this.fetched_user);
     }
     handleAction(action){
+        //The store receives the action from the dispatcher
+        //and depending the action it will preform a certain function
         switch(action.type){
             case "LOGIN" :
                 this.LogIn(action.email, action.password);

@@ -16,7 +16,8 @@ export default class Login extends Component {
     render(){
         return(
 
-            <div className="container-fluid align-middle" style={{padding:50,backgroundColor:'#7aabef',borderRadius:20, maxWidth:650,  color:'white' }}>
+            <div className="container-fluid" style={{padding:50,backgroundColor:'#7aabef',borderRadius:20, maxWidth:650, color:'white',
+            marginTop:100}}>
                 <div className="row" >
                     <h1 className="text-center">The Roll Book App</h1>
                     <div className="form-group">

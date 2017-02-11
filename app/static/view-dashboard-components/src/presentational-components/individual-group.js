@@ -4,6 +4,7 @@
 import React, {Component} from 'react'
 import {OverlayTrigger, Tooltip} from 'react-bootstrap'
 import ActionPrompt from './ActionPrompt'
+import {Link} from 'react-router'
 
 
 export default class Groups extends Component{
@@ -30,11 +31,23 @@ export default class Groups extends Component{
             <Tooltip id="tooltip"><strong>Number of Students:{numberOfStudents}</strong></Tooltip>
         );
         return (
+//Changed col-xs-offset-2 from parent div
+            /*className={
+                !(this.props.keytwo%2===0)?"toStyle col-sm-offset-1 col-sm-5":
+                "toStyle col-sm-5 col-sm-offset-1"
+            }*/
+            <div onClick={()=>{this.open()}} className="col-sm-6"  >
+                 <div style={{height:150}}className="panel panel-info group">
+                        <div className="panel-heading head">{this.props.groupObject.name}</div>
+                        <div className="panel-body">
+                            Number of Students:{numberOfStudents}
+                            <div><Link to="/index/view-info">Take today's assistance</Link></div>
+                        </div>
+                 </div>
 
-            <div onClick={()=>{this.open()}} className="toStyle col-xs-offset-2 col-xs-8" >
-                <OverlayTrigger placement="top" overlay={toolTip}>
+{/*                <OverlayTrigger placement="top" overlay={toolTip}>
                     <h1 className="text-center">{this.props.groupObject.name}</h1>
-                </OverlayTrigger>
+                </OverlayTrigger>*/}
                 <ActionPrompt name={groupName} show={this.state.showModal}
                               onHide={()=>{this.close()}} id={groupId}
                               href={"/view-group-info/"+groupId}/>

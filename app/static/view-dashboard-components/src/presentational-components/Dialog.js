@@ -5,59 +5,47 @@ import React, {Component} from 'react'
 import {Modal, Button} from 'react-bootstrap'
 import * as Actions from '../../../actions/rollActions'
 import sessionManager from '../../../stores/sessionStore'
-import groupManager from '../../../stores/groupStore'
 import CreateGroup from './dialog-components/createGroup'
 import CreateStudent from './dialog-components/createStudent'
-
 export default class Dialog extends Component {
     constructor(props){
         super(props);
-        this.state={
-            showMultiple:false
-        }
     }
-    showMultiple(){
-        this.setState({
-            showMultiple:!this.state.showMultiple
-        })
-    }
-    handleClick(action, multipleSelect=false ) {
+
+    handleClick(action) {
         switch (action) {
             case "CREATE_NEW_GROUP":
                 let name = document.getElementById('name').value;
                 if (name.length > 0) {
                     console.log(name);
-                    Actions.createGroup(name, sessionManager.getCurrentUser().id)
+                    Actions.createGroup(name, sessionManager.getCurrentUser().id);
+                    this.props.onHide()
                 } else {
                     alert("You left name field blank")
                 }
                 break;
             case "CREATE_NEW_STUDENT":
-                if(!multipleSelect) {
                     const selectedGroup = document.getElementById("group");
                     console.log(selectedGroup);
-
                     const Info = {
                         name: document.getElementById('name').value,
                         email: document.getElementById('email').value,
-                        toGroup: selectedGroup.options[selectedGroup.selectedIndex].value
+                        toGroup: selectedGroup.options[selectedGroup.selectedIndex].value,
+                        father_name : document.getElementById('Father').value,
+                        mother_name : document.getElementById('Mother').value,
+                        pemail: document.getElementById('Pemail').value,
+                        tel: document.getElementById("Telephone").value
                     };
-
-                    for(let i in Info){if(Info[i].length===0){alert("you left a blank field"); return null}}
-                    Actions.createStudent(Info.name, Info.email, Info.toGroup);
-                }else{
-                   const form = document.getElementById("groups").children;
-                   console.log(form);
-                   const selectedItems = groupManager.getCheckedItemsFrom(form);
-                   const Info={
-                       multipleSelect:true,
-                       toGroup:selectedItems,
-                       name: document.getElementById('name').value,
-                       email: document.getElementById('email').value,
-                   }
-                   for(let i in Info){if(Info[i].length===0){alert("you left a blank field"); return null}}
-                    Actions.createStudent(Info.name,Info.email,Info.toGroup,Info.multipleSelect)
-                }
+                    for(let i in Info){
+                        if(""+i !== "toGroup") {
+                            if (Info[i].length<4) {
+                                alert("some fields are Invalid");
+                                return null
+                            }
+                        }
+                    }
+                    Actions.createStudent(Info.name,Info.email,Info.toGroup,Info.father_name,Info.mother_name,Info.pemail,Info.tel);
+                    this.props.onHide();
                 break;
             default:
                 console.log("Check your switch for errors");
@@ -72,18 +60,15 @@ export default class Dialog extends Component {
             <Modal.Title>{this.props.title}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/*<div className="form-group">*/}
-                {/*<label htmlFor="name" >Name:</label>*/}
-                {/*<input id="name" className="form-control" placeholder="Create new Group"/>*/}
-            {/*</div>*/}
               {selected===cases[0]?<CreateGroup />:
-              <CreateStudent showMultiple={this.state.showMultiple} handleClick={()=>{this.showMultiple()}
-              } />}
+              <CreateStudent />}
           </Modal.Body>
           <Modal.Footer>
+
               <Button onClick={()=>{
-                  this.handleClick(this.props.selected,this.state.showMultiple);
-                  this.props.onHide();}} className="btn btn-primary">Create</Button>
+                      this.handleClick(this.props.selected);
+                  }}
+                      className="btn btn-primary">Create</Button>
             <Button onClick={()=>{this.props.onHide()}}>Close</Button>
           </Modal.Footer>
         </Modal>

@@ -9,19 +9,24 @@ import * as Actions from '../../../actions/rollActions'
 export default class Navigation extends Component{
     constructor(props){
         super(props);
+        this.navListen = this.navListen.bind(this);
         this.state ={
             isLoggedIn:sessionManager.isLogedIn()
         }
     }
+    navListen(){
+         this.setState({isLoggedIn:sessionManager.isLogedIn()})
+    }
     componentWillMount(){
-        sessionManager.on("change", ()=>{
-            this.setState({isLoggedIn:sessionManager.isLogedIn()})
-        })
+        sessionManager.on("change", this.navListen)
+    }
+    componentWillUnmount(){
+        sessionManager.removeListener("change", this.navListen)
     }
    render() {
-        console.log(sessionManager.isLogedIn())
+        console.log(sessionManager.isLogedIn());
       return(
-          <Navbar inverse collapseOnSelect>
+          <Navbar collapseOnSelect>
             <Navbar.Header>
                 <Navbar.Brand>
                     <a href="#">Roll Book App</a>

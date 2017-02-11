@@ -3,6 +3,7 @@
  */
 import React, {Component} from 'react'
 import {Modal, Button, ButtonGroup} from 'react-bootstrap'
+import * as Actions from '../../../actions/rollActions'
 import {hashHistory} from 'react-router'
 export default class ActionPrompt extends Component {
     constructor(props){
@@ -10,6 +11,15 @@ export default class ActionPrompt extends Component {
     }
     handleClick(href){
         hashHistory.push(href);
+    }
+    deleteClick(group_id){
+        let Confirm = confirm("Are You sure you wish to delete the group "+this.props.name+" ?");
+        if(Confirm) {
+            Actions.deleteGroup(group_id);
+            this.props.onHide()
+        }else{
+            return null;
+        }
     }
     render(){
         return(
@@ -19,11 +29,12 @@ export default class ActionPrompt extends Component {
           </Modal.Header>
           <Modal.Body>
              <ButtonGroup vertical block>
-                <Button bsStyle="primary">Add Student</Button>
                  <Button bsStyle="default" onClick={
                      ()=>{this.handleClick(this.props.href)}
                  } >View Group Information</Button>
-                 <Button bsStyle="danger" >Delete Group</Button>
+                 <Button bsStyle="danger" onClick ={()=>{
+                     this.deleteClick(this.props.id)
+                 }} >Delete Group</Button>
              </ButtonGroup>
           </Modal.Body>
           <Modal.Footer>

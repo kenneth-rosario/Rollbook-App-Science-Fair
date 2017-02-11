@@ -11,8 +11,8 @@ export default class MyButton extends Component{
     render(){
         return(
             <Link onClick={this.props.onClick} to = {this.props.href}>
-                <div className="bbtn" >
-                    <h4>{this.props.title}</h4>
+                <div className="bbtn">
+                    <h5>{this.props.title}</h5>
                 </div>
             </Link>
         )

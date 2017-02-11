@@ -1,30 +1,37 @@
 'use strict';
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import ViewManage from './view-manage-interactivity/src/wrapper-manage.js'
 import ViewLogin from './view-login-components/src/wrapper-login'
-import { Router, Route, IndexRoute, hashHistory, IndexRedirect } from "react-router";
+import { Router, Route, IndexRoute, hashHistory, IndexRedirect, Redirect } from "react-router";
 import RegisterContainer from './view-login-components/src/container-components/register-container.js'
 import LoginContainer from './view-login-components/src/container-components/login-container'
 import sessionManager from './stores/sessionStore'
 import DashBoard from './view-dashboard-components/src/presentational-components/Dashboard'
-//use react-route here to divide them in routes'
 import ViewInfo from './view-dashboard-components/src/presentational-components/view-info'
 import Groups from './view-dashboard-components/src/presentational-components/groups'
 import ViewGroup from "./view-dashboard-components/src/presentational-components/ViewGroup"
+import GradesContainer from './view-grades-component/src/container-components/GradesContainer'
+import StudentProfile from './view-student-interactivity/src/presentational-components/Profile'
+import MainView from './view-statistics-interactivity/src/presentational-components/MainVIew'
+
 class DashOrLog extends Component{
     constructor(){
         super();
+        this.DashOrLogLis = this.DashOrLogLis.bind(this);
         this.state = {
             isLoggedIn:sessionManager.isLogedIn()
         };
     }
-    componentWillMount(){
-        sessionManager.on("change",()=>{
-            this.setState({
+    DashOrLogLis(){
+        this.setState({
                 isLoggedIn:sessionManager.isLogedIn()
-            });
         });
+    }
+    componentWillMount(){
+        sessionManager.on("change",this.DashOrLogLis);
+    }
+    componentWillUnmount(){
+        sessionManager.removeListener("change", this.DashOrLogLis)
     }
     render(){
         return(
@@ -41,9 +48,7 @@ class Routing extends Component {
     constructor(){
         super();
     }
-    componentWillMount(){
 
-    }
     render() {
         return(
         <Router history={hashHistory}>
@@ -55,9 +60,17 @@ class Routing extends Component {
                     {/*<Route path="/view-group-info/:id" component={ViewGroup}/>*/}
                     <Route path="view-info" component={ViewInfo}/>
                     <Route path="/view-group-info/:id" component={ViewGroup} />
+                    <Route path="/student-profile/:id" component={StudentProfile}/>
+                    <Route path="/group-statistics" component={MainView}/>
                 </Route>
-                <Route path="register" component={RegisterContainer}>
+                <Route path="register" component={RegisterContainer} />
+                <Route path="groups/:id/grades" component={GradesContainer} >
+                    {
+                        sessionManager.isLogedIn()?"":<Redirect to="/index" />
+                    }
                 </Route>
+
+                {/*<Route path="/add-grade/to-group/:id" component={}/>*/}
             </Route>
         </Router>
         )

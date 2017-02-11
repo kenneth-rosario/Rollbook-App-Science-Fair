@@ -10,6 +10,8 @@ import * as Actions from '../../../actions/rollActions'
 export default class Groups extends Component {
     constructor(props){
         super(props);
+        this.groupmangeListen = this.groupmangeListen.bind(this);
+        this.sessionListen = this.sessionListen.bind(this);
         this.state ={
           groups: sessionManager.getCurrentUser().groups,
           paginationArray:groupManager.divideForPagination(
@@ -21,6 +23,31 @@ export default class Groups extends Component {
     }filter(filter){
         Actions.filter(filter);
     }
+    groupmangeListen(){
+         console.log("I am inside listener");
+            const filterOutput = groupManager.getFilterOutput();
+            this.setState({
+                groups: filterOutput,
+                paginationArray:groupManager.divideForPagination(filterOutput)
+            })
+    }
+    sessionListen(){
+        console.log("updating");
+             let groups;
+            try{
+                groups = sessionManager.getCurrentUser().groups
+            }
+            catch(e){
+                groups = null
+            }
+            this.setState({
+                groups:groups,
+                paginationArray:groupManager.divideForPagination(
+                groups
+                ),
+                MyValue:""
+            })
+    }
     updateValue(evt){
         this.setState({
             MyValue:evt.target.value
@@ -28,26 +55,13 @@ export default class Groups extends Component {
         this.filter(evt.target.value);
     }
     componentWillMount(){
-        groupManager.on("change", ()=>{
-            console.log("I am inside listener");
-            const filterOutput = groupManager.getFilterOutput();
-            this.setState({
-                groups: filterOutput,
-                paginationArray:groupManager.divideForPagination(filterOutput)
-            })
-        });
-        sessionManager.on("change", ()=>{
-            console.log("updating");
-            this.setState({
-                groups: sessionManager.getCurrentUser().groups,
-                paginationArray:groupManager.divideForPagination(
-                sessionManager.getCurrentUser().groups
-                ),
-                MyValue:""
-            })
-        })
+        groupManager.on("change", this.groupmangeListen);
+        sessionManager.on("change", this.sessionListen);
     }
-
+    componentWillUnmount(){
+        groupManager.removeListener("change", this.groupmangeListen);
+        sessionManager.removeListener("change", this.sessionListen);
+    }
     render(){
         const pagAr = this.state.paginationArray;
         const groups = this.state.groups;
@@ -59,17 +73,22 @@ export default class Groups extends Component {
             toReturn = []}
         return (
             <div>
-                Search:<input type="text"
-                              onChange={(evt)=>{this.updateValue(evt)}}
-                              value={this.state.MyValue} />
-                {
 
+                <div className="col-xs-offset-1 col-xs-10 form-group">
+                    <label htmlFor="search">Search:</label>
+                    <input className="form-control" id="search" placeholder="Search your groups" type="text"
+                                  onChange={(evt)=>{this.updateValue(evt)}}
+                                  value={this.state.MyValue} />
+                </div>
+                <div className="col-xs-offset-1 col-xs-10">
+                {
                    toReturn.map((element,i)=>{
-                       return <Group groupObject={element} key={i} />
+                       return <Group groupObject={element} key={i} keytwo={i}/>
                    })
                 }
+                </div>
                 <div>
-                <MyPagination history={(a)=>{this.props.router.history.push(a)}} active={this.props.params.page} className="col-xs-offset-2 col-xs-10 pagination" toDo numberOfPages={pagAr.length} />
+                <MyPagination history={(a)=>{this.props.router.history.push(a)}} active={this.props.params.page} className="col-xs-offset-4 pagination" toDo numberOfPages={pagAr.length} />
             </div>
             </div>
         )

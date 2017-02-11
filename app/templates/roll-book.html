@@ -2,34 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Title</title>
 
     <link href="{{url_for('static', filename='css/bootstrap.css')}}" rel="stylesheet" type="text/css" />
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/slate/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://bootswatch.com/superhero/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="{{url_for('static', filename='css/roll-book.css')}}" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Bree+Serif|Roboto+Condensed" rel="stylesheet">
     <style>
+    .group{
+        cursor:pointer;
+    }
+    .group:hover > .head{
+        background-color: #d58512;
+        transition: 0.3s background-color;
+    }
+        @media(min-width:768px){
+            body{
+                overflow-y: hidden;
+            }
+        }
+        .student-row:hover{
+            cursor:pointer;
+            background-color: #c9d8d3;
+            color:black;
+            transition:background-color 0.3s, color 0.3s;
+        }
         .align-middle {
             margin-top: 25%;
             margin-bottom: 25%;
         }
         .bbtn{
+            font-family: 'Bree Serif', serif;
             margin-top:30px;
             margin-bottom:10px;
-            padding:35px;
+            padding:10px;
             background: #466368;
             background: linear-gradient(#648880, #293f50);
-            border-radius: 6px;
-            height: 120px;
+            height: 60px;
             color:white;
             padding-bottom:40px;
             transition:background 0.7s;
+
         }
         .different-color{
             background: #636363;
             background: linear-gradient(#4e525a, #3d4653);
             margin-bottom:20px;
-            height:100%
+            height:1000px;
+            margin-top:-20px;
         }
         .bbtn:hover{
             background: #373e5e;
@@ -37,9 +58,14 @@
             transition: background 0.8s
         }
         .info-window{
+            font-family: "Roboto Condensed", sans-serif;
             background: #373e5e;
             background: linear-gradient(#498061, #3d757d);
-            height:610px;
+            height:600px;
+            overflow-y: auto;
+            overflow-x: initial;
+            color:white;
+            margin-top: -20px;
         }
          .toStyle{
          margin-top:40px;
@@ -49,14 +75,119 @@
         color:white;
         border-radius:5px;
         cursor:pointer;
+          font-size:7px;
       }
+        .cover{
+            position: absolute;
+            background-color: black;
+            opacity: 0.6;
+            height:150%;
+            width:100%;
+            background-image: url('https://s-media-cache-ak0.pinimg.com/originals/76/47/bb/7647bb7539382dd708010625c4598021.gif');
+            background-repeat: no-repeat;
+            background-size:cover;
+            z-index:100;
+        }
+    #grade-table{
+        margin-top:20px;
+    }
+    .the-container{
+        position: relative;
+        height:200%
+    }
+    #the-table{
+        overflow-x: auto;
+    }
+    #row-search{
+        margin-top:40px;
+    }
+    .button-trigger{
+        background-color:black;
+        opacity: 0.7;
+        padding: 20px;
+        visibility: visible;
+    }
+    .mobile-btns{
+        margin-top:-18px;
+        padding-right:-60px;
+        height:550px;
+        background-color: black;
+        opacity:0.8;
+        position:absolute;
+        z-index:20;
+        width: 300px;
+        visibility: visible;
+        transition: visibility 0.1s linear, margin-left 0.2s linear 0.1s
+    }
+    .mobile-hide {
+        margin-top:-18px;
+        padding-right:-60px;
+        height:550px;
+        background-color: black;
+        opacity:0.8;
+        position:absolute;
+        z-index:20;
+        width: 300px;
+        visibility: hidden;
+        margin-left: -310px;
+        transition: visibility 0.5s linear 1s, margin-left 0.2s linear
+    }
+    #cal-wrap{
+        position: relative;
+        width:400px;
+        z-index:200;
+        left:-37%;
+    }
+    .hideCalc{
+        visibility: hidden;
+        margin-top:-600px;
+        transition: visibility 0.2s linear 0.2s, margin-top 0.4s linear
+    }
+    .showCalc{
+        position:static;
+        visibility: visible;
+        margin-top:0;
+        transition: visibility 0.2s linear, margin-top 0.4s linear ;
+    }
+    #calc-trigger{
+        height:35px;
+        background: linear-gradient(black, #3d4653);
+        padding:30px;
+        cursor:pointer;
+        opacity:0.7;
+    }
+    #remove-options{
+        cursor: pointer;
+    }
+        @media (max-width: 768px){
+            .bbtn{
+                    text-align: center;
+                    margin-top:-5px;
+                    background: #636363;
+                    background: linear-gradient(black, #3d4653);
+                    margin-bottom:0;
+                    height:150px;
+                    border:solid black;
+                    padding:30px;
+                    padding-bottom:70px;
+                    padding-left:0;
+                    border-radius:0;
+                    width:105%;
+            }
+        }
+        #search{
+            margin:auto;
+        }
 
+        @media (max-width: 500px) {
+            #cal-wrap{
+                left:-44%;
+                width:300px;
+            }
+        }
     </style>
 </head>
 <body>
-    <nav id="navbar">
-
-    </nav>
     <div id="app" >
 
     </div>
