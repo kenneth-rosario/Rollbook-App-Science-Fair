@@ -34,6 +34,11 @@ export default class Navigation extends Component{
                 <Navbar.Toggle />
             </Navbar.Header>
             <Navbar.Collapse>
+                <Navbar.Text>
+                    <Navbar.Link href="https://github.com/kenneth-rosario/Rollbook-App-Science-Fair" >
+                        View Project Repository
+                    </Navbar.Link>
+                </Navbar.Text>
                 <Nav pullRight>
                     <NavItem eventKey={4} href="#">{this.props.current_user===null
                         ?"Not Signed In":this.props.current_user.fullname}</NavItem>

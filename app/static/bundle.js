@@ -26988,46 +26988,12 @@
 	                    _reactBootstrap.Navbar.Collapse,
 	                    null,
 	                    _react2.default.createElement(
-	                        _reactBootstrap.Nav,
+	                        _reactBootstrap.Navbar.Text,
 	                        null,
 	                        _react2.default.createElement(
-	                            _reactBootstrap.NavItem,
-	                            { eventKey: 1, href: '/login/lala' },
-	                            'Costumer Support'
-	                        ),
-	                        _react2.default.createElement(
-	                            _reactBootstrap.NavItem,
-	                            { eventKey: 2 },
-	                            _react2.default.createElement(
-	                                _reactRouter.Link,
-	                                { to: 'register' },
-	                                'Find Teacher'
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            _reactBootstrap.NavDropdown,
-	                            { eventKey: 3, title: '', id: 'basic-nav-dropdown' },
-	                            _react2.default.createElement(
-	                                _reactBootstrap.MenuItem,
-	                                { eventKey: 3.1 },
-	                                'Action'
-	                            ),
-	                            _react2.default.createElement(
-	                                _reactBootstrap.MenuItem,
-	                                { eventKey: 3.2 },
-	                                'Another action'
-	                            ),
-	                            _react2.default.createElement(
-	                                _reactBootstrap.MenuItem,
-	                                { eventKey: 3.3 },
-	                                'Something else here'
-	                            ),
-	                            _react2.default.createElement(_reactBootstrap.MenuItem, { divider: true }),
-	                            _react2.default.createElement(
-	                                _reactBootstrap.MenuItem,
-	                                { eventKey: 3.3 },
-	                                'Separated link'
-	                            )
+	                            _reactBootstrap.Navbar.Link,
+	                            { href: 'https://github.com/kenneth-rosario/Rollbook-App-Science-Fair' },
+	                            'View Project Repository'
 	                        )
 	                    ),
 	                    _react2.default.createElement(
