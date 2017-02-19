@@ -32,7 +32,6 @@ export default class Dialog extends Component {
                         email: document.getElementById('email').value,
                         toGroup: selectedGroup.options[selectedGroup.selectedIndex].value,
                         father_name : document.getElementById('Father').value,
-                        mother_name : document.getElementById('Mother').value,
                         pemail: document.getElementById('Pemail').value,
                         tel: document.getElementById("Telephone").value
                     };
@@ -44,7 +43,7 @@ export default class Dialog extends Component {
                             }
                         }
                     }
-                    Actions.createStudent(Info.name,Info.email,Info.toGroup,Info.father_name,Info.mother_name,Info.pemail,Info.tel);
+                    Actions.createStudent(Info.name,Info.email,Info.toGroup,Info.father_name,Info.pemail,Info.tel);
                     this.props.onHide();
                 break;
             default:

@@ -47172,21 +47172,19 @@
 
 	function createStudent(name, email, toGroup) {
 	    var father = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-	    var mother = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
-	    var Pemail = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
-	    var Telephone = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+	    var Pemail = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+	    var Telephone = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
 
 	    console.log("dispatching createStudent action");
 	    console.log("dispatching action");
 	    console.log(father);
-	    console.log(mother);
+
 	    _sessionStore2.default.ShowLoadingPage();
 	    _dispatcher2.default.dispatch({
 	        type: "CREATE_NEW_STUDENT",
 	        name: name,
 	        email: email,
 	        father: father,
-	        mother: mother,
 	        Pemail: Pemail,
 	        telephone: Telephone,
 	        toGroup: toGroup
@@ -48043,7 +48041,6 @@
 	                        email: document.getElementById('email').value,
 	                        toGroup: selectedGroup.options[selectedGroup.selectedIndex].value,
 	                        father_name: document.getElementById('Father').value,
-	                        mother_name: document.getElementById('Mother').value,
 	                        pemail: document.getElementById('Pemail').value,
 	                        tel: document.getElementById("Telephone").value
 	                    };
@@ -48055,7 +48052,7 @@
 	                            }
 	                        }
 	                    }
-	                    Actions.createStudent(Info.name, Info.email, Info.toGroup, Info.father_name, Info.mother_name, Info.pemail, Info.tel);
+	                    Actions.createStudent(Info.name, Info.email, Info.toGroup, Info.father_name, Info.pemail, Info.tel);
 	                    this.props.onHide();
 	                    break;
 	                default:
@@ -48727,18 +48724,16 @@
 	        key: 'createStudent',
 	        value: function createStudent(name, email, group) {
 	            var fname = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-	            var mname = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
-	            var pemail = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
-	            var ptel = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+	            var pemail = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+	            var ptel = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
 
 	            console.log(fname);
-	            console.log(mname);
+
 	            var Json = {
 	                name: name,
 	                email: email,
 	                group: group,
 	                fname: fname,
-	                mname: mname,
 	                pemail: pemail,
 	                ptel: ptel,
 	                teacher_id: _sessionStore2.default.getCurrentUser().id
@@ -48837,7 +48832,7 @@
 	        value: function handleAction(action) {
 	            switch (action.type) {
 	                case "CREATE_NEW_STUDENT":
-	                    this.createStudent(action.name, action.email, action.toGroup, action.father, action.mother, action.Pemail, action.telephone);
+	                    this.createStudent(action.name, action.email, action.toGroup, action.father, action.Pemail, action.telephone);
 	                    console.log("finally");
 	                    break;
 	                case "EMAIL_PERFORMANCE":

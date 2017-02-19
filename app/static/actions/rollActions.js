@@ -42,18 +42,17 @@ export function deleteAssistance (object){
     })
 }
 
-export function createStudent(name, email, toGroup, father = false ,mother=false ,Pemail=false, Telephone=false){
+export function createStudent(name, email, toGroup, father = false ,Pemail=false, Telephone=false){
     console.log("dispatching createStudent action");
     console.log("dispatching action");
     console.log(father);
-    console.log(mother);
+
     sessionManager.ShowLoadingPage();
     dispatcher.dispatch({
         type:"CREATE_NEW_STUDENT",
         name:name,
         email:email,
         father:father,
-        mother: mother,
         Pemail:Pemail,
         telephone:Telephone,
         toGroup:toGroup

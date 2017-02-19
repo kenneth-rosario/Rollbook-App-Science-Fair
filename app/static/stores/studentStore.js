@@ -121,15 +121,14 @@ class StudentManager extends EventEmitter {
         console.log(toReturn);
         return toReturn
     }
-    createStudent(name,email,group,fname=false,mname=false,pemail=false,ptel=false){
+    createStudent(name,email,group,fname=false,pemail=false,ptel=false){
         console.log(fname);
-        console.log(mname);
+
         const Json = {
             name:name,
             email:email,
             group:group,
             fname:fname,
-            mname:mname,
             pemail:pemail,
             ptel:ptel,
             teacher_id:sessionManager.getCurrentUser().id
@@ -222,7 +221,7 @@ class StudentManager extends EventEmitter {
     handleAction(action){
         switch(action.type){
             case "CREATE_NEW_STUDENT" :
-                this.createStudent(action.name,action.email,action.toGroup,action.father,action.mother,action.Pemail,action.telephone);
+                this.createStudent(action.name,action.email,action.toGroup,action.father,action.Pemail,action.telephone);
                 console.log("finally");
                 break;
             case "EMAIL_PERFORMANCE":
