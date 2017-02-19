@@ -28,6 +28,20 @@ export function filter(value){
     });
 }
 
+export function addAssistance (object){
+    dispatcher.dispatch({
+        type:"ASSISTANCE",
+        object:object
+    })
+}
+
+export function deleteAssistance (object){
+    dispatcher.dispatch({
+        type:"DELETE_ASSISTANCE",
+        object: object
+    })
+}
+
 export function createStudent(name, email, toGroup, father = false ,mother=false ,Pemail=false, Telephone=false){
     console.log("dispatching createStudent action");
     console.log("dispatching action");

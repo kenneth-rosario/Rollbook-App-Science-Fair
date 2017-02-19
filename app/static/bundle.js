@@ -102,6 +102,10 @@
 
 	var _MainVIew2 = _interopRequireDefault(_MainVIew);
 
+	var _MainView = __webpack_require__(548);
+
+	var _MainView2 = _interopRequireDefault(_MainView);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -183,7 +187,8 @@
 	                        _react2.default.createElement(_reactRouter.Route, { path: 'view-info', component: _viewInfo2.default }),
 	                        _react2.default.createElement(_reactRouter.Route, { path: '/view-group-info/:id', component: _ViewGroup2.default }),
 	                        _react2.default.createElement(_reactRouter.Route, { path: '/student-profile/:id', component: _Profile2.default }),
-	                        _react2.default.createElement(_reactRouter.Route, { path: '/group-statistics', component: _MainVIew2.default })
+	                        _react2.default.createElement(_reactRouter.Route, { path: '/group-statistics', component: _MainVIew2.default }),
+	                        _react2.default.createElement(_reactRouter.Route, { path: '/take-assistance/:id', component: _MainView2.default })
 	                    ),
 	                    _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _registerContainer2.default }),
 	                    _react2.default.createElement(
@@ -47103,6 +47108,8 @@
 	exports.Login = Login;
 	exports.LogOut = LogOut;
 	exports.filter = filter;
+	exports.addAssistance = addAssistance;
+	exports.deleteAssistance = deleteAssistance;
 	exports.createStudent = createStudent;
 	exports.removeGrade = removeGrade;
 	exports.createGrade = createGrade;
@@ -47146,6 +47153,20 @@
 	    _dispatcher2.default.dispatch({
 	        type: "FILTER_GROUP",
 	        filter: value
+	    });
+	}
+
+	function addAssistance(object) {
+	    _dispatcher2.default.dispatch({
+	        type: "ASSISTANCE",
+	        object: object
+	    });
+	}
+
+	function deleteAssistance(object) {
+	    _dispatcher2.default.dispatch({
+	        type: "DELETE_ASSISTANCE",
+	        object: object
 	    });
 	}
 
@@ -48768,6 +48789,50 @@
 	            });
 	        }
 	    }, {
+	        key: 'addAssistance',
+	        value: function addAssistance(info_object) {
+	            _sessionStore2.default.ShowLoadingPage();
+
+	            fetch('/add-assistance', {
+	                method: "POST",
+	                headers: {
+	                    "Content-Type": "application/json"
+	                },
+	                body: JSON.stringify(info_object)
+	            }).then(function (response) {
+	                return response.json();
+	            }).then(function (parsed) {
+	                localStorage.setItem("jtk", JSON.stringify(parsed));
+	                _sessionStore2.default.setUser(parsed);
+	                alert("Succesful Request");
+	                _reactRouter.hashHistory.push('/');
+	            }).catch(function () {
+	                alert("Error Connecting to Server");
+	            });
+	            _sessionStore2.default.HideLoadingPage();
+	        }
+	    }, {
+	        key: 'deleteAssistance',
+	        value: function deleteAssistance(object) {
+	            console.log(object);
+	            fetch('/delete-assistance', {
+	                method: "POST",
+	                headers: {
+	                    "Content-Type": "application/json"
+	                },
+	                body: JSON.stringify(object)
+	            }).then(function (response) {
+	                return response.json();
+	            }).then(function (info) {
+	                localStorage.setItem('jtk', JSON.stringify(info));
+	                _sessionStore2.default.setUser(info);
+	                alert("Deletion Succesful");
+	            }).catch(function (err) {
+	                console.log(err);
+	                alert("Server Error");
+	            });
+	        }
+	    }, {
 	        key: 'handleAction',
 	        value: function handleAction(action) {
 	            switch (action.type) {
@@ -48780,6 +48845,12 @@
 	                    break;
 	                case "DELETE_STUDENT":
 	                    this.deleteStudent(action.id);
+	                    break;
+	                case "ASSISTANCE":
+	                    this.addAssistance(action.object);
+	                    break;
+	                case "DELETE_ASSISTANCE":
+	                    this.deleteAssistance(action.object);
 	                    break;
 	            }
 	        }
@@ -48834,8 +48905,7 @@
 	        _this.state = {
 	            "name": ["", false, "Student's Name", "name", "text"],
 	            "email": ["", false, "Student's Email", "email", "email"],
-	            "Father": ["", false, "Father's Name", "Father", "text"],
-	            "Mother": ["", false, "Mother's Name", "Mother", "text"],
+	            "Father": ["", false, "Legal Guardian's Name", "Father", "text"],
 	            "Pemail": ["", false, "Where to contact parent via email", "Pemail", "email"],
 	            "Telephone": ["", false, "Where to Call in Case of emergency", "Telephone", "tel"]
 	        };
@@ -49630,11 +49700,11 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            null,
-	                            _react2.default.createElement(
+	                            numberOfStudents > 0 ? _react2.default.createElement(
 	                                _reactRouter.Link,
-	                                { to: '/index/view-info' },
+	                                { to: "/take-assistance/" + this.props.groupObject.id },
 	                                'Take today\'s assistance'
-	                            )
+	                            ) : ""
 	                        )
 	                    )
 	                ),
@@ -51578,6 +51648,16 @@
 
 	var _sessionStore2 = _interopRequireDefault(_sessionStore);
 
+	var _Accordion = __webpack_require__(236);
+
+	var _Accordion2 = _interopRequireDefault(_Accordion);
+
+	var _Panel = __webpack_require__(468);
+
+	var _Panel2 = _interopRequireDefault(_Panel);
+
+	var _rollActions = __webpack_require__(492);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -51597,21 +51677,57 @@
 
 	        var _this = _possibleConstructorReturn(this, (StudentProfile.__proto__ || Object.getPrototypeOf(StudentProfile)).call(this, props));
 
+	        _this.studentListen = _this.studentListen.bind(_this);
 	        _this.state = {
-	            student: _studentStore2.default.getStudentById(parseInt(_this.props.params.id))
+	            student: _studentStore2.default.getStudentById(parseInt(_this.props.params.id)),
+	            performance: _studentStore2.default.performanceFunction(_studentStore2.default.getAvgGradeForStudentWithId(parseInt(_this.props.params.id)))
 	        };
 	        return _this;
 	    }
 
 	    _createClass(StudentProfile, [{
+	        key: 'studentListen',
+	        value: function studentListen() {
+	            this.setState({
+	                student: _studentStore2.default.getStudentById(parseInt(this.props.params.id)),
+	                performance: _studentStore2.default.performanceFunction(_studentStore2.default.getAvgGradeForStudentWithId(parseInt(this.props.params.id)))
+	            });
+	        }
+	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            _sessionStore2.default.on("change", this.studentListen);
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            _sessionStore2.default.removeListener("change", this.studentListen);
+	        }
+	    }, {
+	        key: 'deleteAssistance',
+	        value: function deleteAssistance(id) {
+	            (0, _rollActions.deleteAssistance)({
+	                id: parseInt(id),
+	                user_id: parseInt(this.state.student.teacher_id)
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
 	            var group = _groupStore2.default.getGroupById(parseInt(this.state.student.group_id));
 	            var currentUser = _sessionStore2.default.getCurrentUser().fullname;
+	            var table_style = {
+	                border: "none", borderCollapse: "collapsed",
+	                padding: 15
+	            };
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'row info-window', style: { overflowX: "unset", paddingBottom: 5,
-	                        fontFamily: "'Roboto Condensed', sans-serif"
+	                { className: 'row',
+	                    style: { overflowY: "auto", paddingBottom: 5,
+	                        fontFamily: "'Roboto Condensed', sans-serif",
+	                        height: window.innerHeight - 80
 	                    } },
 	                _react2.default.createElement(
 	                    'div',
@@ -51641,10 +51757,92 @@
 	                    { className: 'col-xs-12' },
 	                    _react2.default.createElement('hr', null)
 	                ),
-	                _react2.default.createElement(_Performance2.default, {
-	                    id: parseInt(this.props.params.id)
-	                }),
-	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-xs-12' },
+	                    _react2.default.createElement(
+	                        _Accordion2.default,
+	                        null,
+	                        _react2.default.createElement(
+	                            _Panel2.default,
+	                            { header: 'Student\'s Performance', bsStyle: this.state.performance === "F" || this.state.performance === "D" ? "danger" : "info",
+	                                eventKey: '1' },
+	                            _react2.default.createElement(_Performance2.default, {
+	                                id: parseInt(this.props.params.id) }),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'col-xs-12' },
+	                                _react2.default.createElement(_ScoreNeeded2.default, {
+	                                    id: parseInt(this.props.params.id)
+	                                })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            _Panel2.default,
+	                            { header: 'Legal Guardian\'s Information', eventKey: '2' },
+	                            _react2.default.createElement(
+	                                'ul',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'li',
+	                                    null,
+	                                    'Name: ',
+	                                    this.state.student.parents.name
+	                                ),
+	                                _react2.default.createElement(
+	                                    'li',
+	                                    null,
+	                                    'Email: ',
+	                                    this.state.student.parents.email
+	                                ),
+	                                _react2.default.createElement(
+	                                    'li',
+	                                    null,
+	                                    'Telephone: ',
+	                                    this.state.student.parents.telephone
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            _Panel2.default,
+	                            { header: 'Days Missed', bsStyle: 'danger', eventKey: '3' },
+	                            _react2.default.createElement(
+	                                'table',
+	                                { className: 'table table-responsive',
+	                                    style: table_style },
+	                                this.state.student.days_missed.map(function (element, key) {
+	                                    return _react2.default.createElement(
+	                                        'tr',
+	                                        { style: { padding: 14 } },
+	                                        _react2.default.createElement(
+	                                            'td',
+	                                            {
+	                                                style: table_style
+	                                            },
+	                                            'Date(year-month-day): ',
+	                                            element.date
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            'td',
+	                                            {
+	                                                style: table_style
+	                                            },
+	                                            _react2.default.createElement(
+	                                                'button',
+	                                                {
+	                                                    onClick: function onClick() {
+	                                                        _this2.deleteAssistance(element.id);
+	                                                    },
+	                                                    className: 'btn btn-danger' },
+	                                                'Delete'
+	                                            )
+	                                        )
+	                                    );
+	                                })
+	                            )
+	                        )
+	                    )
+	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'col-xs-12' },
@@ -51656,10 +51854,9 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'col-xs-12' },
-	                    _react2.default.createElement(_ScoreNeeded2.default, {
-	                        id: parseInt(this.props.params.id)
-	                    })
+	                    _react2.default.createElement('br', null)
 	                ),
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'col-xs-12' },
@@ -53819,6 +54016,243 @@
 	}(_react.Component);
 
 	exports.default = DangerGroups;
+
+/***/ },
+/* 548 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _groupStore = __webpack_require__(503);
+
+	var _groupStore2 = _interopRequireDefault(_groupStore);
+
+	var _StudentRow = __webpack_require__(549);
+
+	var _StudentRow2 = _interopRequireDefault(_StudentRow);
+
+	var _rollActions = __webpack_require__(492);
+
+	var _sessionStore = __webpack_require__(486);
+
+	var _sessionStore2 = _interopRequireDefault(_sessionStore);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by uncha_000 on 2/10/2017.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var Assistance = function (_Component) {
+	    _inherits(Assistance, _Component);
+
+	    function Assistance(props) {
+	        _classCallCheck(this, Assistance);
+
+	        var _this = _possibleConstructorReturn(this, (Assistance.__proto__ || Object.getPrototypeOf(Assistance)).call(this, props));
+
+	        _this.state = {
+	            group: _groupStore2.default.getGroupById(parseInt(_this.props.params.id))
+	        };
+	        return _this;
+	    }
+
+	    _createClass(Assistance, [{
+	        key: 'submitTable',
+	        value: function submitTable() {
+	            var tableData = document.getElementById("assistance").children[1].children;
+	            var object_to_send = [];
+	            for (var i = 0; i < tableData.length; i++) {
+	                console.log(tableData[i]);
+	                var toPush = {
+	                    id: parseInt(tableData[i].children[0].innerHTML),
+	                    checked: tableData[i].children[3].children[0].checked,
+	                    teacher_id: _sessionStore2.default.getCurrentUser().id
+	                };
+	                object_to_send.push(toPush);
+	            }
+	            (0, _rollActions.addAssistance)(object_to_send);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var students = this.state.group.students;
+	            var date = new Date();
+	            var style = {
+	                overflowY: "auto",
+	                height: window.innerHeight - 380
+	            };
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    'Assistance For Group:',
+	                    this.state.group.name
+	                ),
+	                _react2.default.createElement(
+	                    'h4',
+	                    null,
+	                    'Date:'
+	                ),
+	                _react2.default.createElement(
+	                    'blockquote',
+	                    null,
+	                    ' ',
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'm/d/y'
+	                    ),
+	                    _react2.default.createElement(
+	                        'h4',
+	                        null,
+	                        date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear()
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'table',
+	                    { id: 'assistance', className: 'table table-bordered table-responsive', style: style },
+	                    _react2.default.createElement(
+	                        'thead',
+	                        null,
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Student Id'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Name'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Email'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Check if absent'
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tbody',
+	                        null,
+	                        students.map(function (element, key) {
+	                            return _react2.default.createElement(_StudentRow2.default, { object: element, key: key });
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'btn btn-success', onClick: function onClick() {
+	                            _this2.submitTable();
+	                        } },
+	                    'Add Assistance'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Assistance;
+	}(_react.Component);
+
+	exports.default = Assistance;
+
+/***/ },
+/* 549 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by uncha_000 on 2/11/2017.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var StudentRow = function (_Component) {
+	    _inherits(StudentRow, _Component);
+
+	    function StudentRow(props) {
+	        _classCallCheck(this, StudentRow);
+
+	        return _possibleConstructorReturn(this, (StudentRow.__proto__ || Object.getPrototypeOf(StudentRow)).call(this, props));
+	    }
+
+	    _createClass(StudentRow, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "tr",
+	                null,
+	                _react2.default.createElement(
+	                    "td",
+	                    null,
+	                    this.props.object.id
+	                ),
+	                _react2.default.createElement(
+	                    "td",
+	                    null,
+	                    this.props.object.name
+	                ),
+	                _react2.default.createElement(
+	                    "td",
+	                    null,
+	                    this.props.object.email
+	                ),
+	                _react2.default.createElement(
+	                    "td",
+	                    null,
+	                    _react2.default.createElement("input", { type: "checkbox" })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return StudentRow;
+	}(_react.Component);
+
+	exports.default = StudentRow;
 
 /***/ }
 /******/ ]);

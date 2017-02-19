@@ -1,6 +1,7 @@
 from __future__ import print_function
 from flask import Flask, render_template, url_for, request, json, jsonify, session
 from flask.ext.sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 import os
 import sys
@@ -9,7 +10,6 @@ from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['DEBUG'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config.update(
     PROPAGATE_EXCEPTIONS=True,
@@ -22,7 +22,7 @@ app.config.update(
 )
 mail = Mail(app)
 db = SQLAlchemy(app)
-from model import Users, Group, Students, Parents, Grades
+from model import Users, Group, Students, Parents, Grades, Assistance
 
 
 @app.route('/')
@@ -267,3 +267,62 @@ def send_mail():
         traceback.print_exception(*e)
         return "Error Sending message"
 
+@app.route('/add-assistance', methods=["POST"])
+def assistance():
+    try:
+        #First The server receives the data
+        data = json.loads(request.data)
+        #We will loop through the list of objects which contain an id a checked boolean and techer_id
+        for i in data:
+            #Retrieve the student with the given ID
+            student = Students.query.filter_by(id = i["id"]).one().restReturn
+            pushed = False
+            #Check if todays date is already in the days Missed
+            for j in student["days_missed"]:
+                print("comparing:"+j["date"]+" with:"+datetime.utcnow()
+                      .strftime("%Y-%m-%d"), file=sys.stderr)
+                if j["date"] == datetime.utcnow().strftime("%Y-%m-%d"):
+                #If true we will then check if the field is checked or unchecked
+
+                    if not i["checked"]:
+                    #If unchecked we will delete the entry from the db
+                        to_remove = Assistance.query.filter_by(id=int(j["id"])).one()
+                        db.session.delete(to_remove)
+                        db.session.commit()
+                        pushed = True
+                        break
+                    #Else we will leave it as if
+                    else:
+                        pushed = True
+                        break
+            #If todays date is not in the days missed by the student
+            if not pushed:
+                #If it is checked we will add it to the db if not we will leave it as if
+                if i["checked"]:
+                    print(datetime.utcnow().strftime("%Y-%m-%d"), file=sys.stderr)
+                    new_assistance = Assistance(student_id= i["id"]
+                                                ,date=datetime.utcnow()
+                                                .strftime("%Y-%m-%d"))
+                    db.session.add(new_assistance)
+        db.session.commit()
+        #Finally we will find the updated user and respond with a JSON token to the client
+        user = Users.query.filter_by(id=int(data[0]["teacher_id"])).one()
+        return jsonify(user.restReturn)
+    except:
+        e = sys.exc_info()
+        traceback.print_exception(*e)
+        return "Error Sending message"
+
+@app.route('/delete-assistance', methods=["POST"])
+def delete_assistance():
+    try:
+        data = json.loads(request.data)
+        toRemove = Assistance.query.filter_by(id=data["id"]).one()
+        db.session.delete(toRemove)
+        db.session.commit()
+        updated_user = Users.query.filter_by(id=data["user_id"]).one()
+        return jsonify(updated_user.restReturn)
+    except:
+        e = sys.exc_info()
+        traceback.print_exception(*e)
+        return "Error Sending message"

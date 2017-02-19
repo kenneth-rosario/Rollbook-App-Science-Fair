@@ -1,2 +1,4 @@
 export APP_SETTINGS="config.DevelopmentConfig"
 export DATABASE_URL="postgresql://localhost/rollbook"
+//new db for new migrations
+export DATABASE_URL="postgresql://localhost/rollbookapp"

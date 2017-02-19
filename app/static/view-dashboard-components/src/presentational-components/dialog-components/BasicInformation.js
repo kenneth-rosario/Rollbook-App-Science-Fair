@@ -10,8 +10,7 @@ export default class BasicInformation extends Component{
         this.state = {
             "name":["",false,"Student's Name", "name", "text"],
             "email":["",false, "Student's Email", "email", "email"],
-            "Father":["",false, "Father's Name", "Father", "text"],
-            "Mother":["",false, "Mother's Name", "Mother", "text"],
+            "Father":["",false, "Legal Guardian's Name", "Father", "text"],
             "Pemail":["",false, "Where to contact parent via email", "Pemail", "email"],
             "Telephone":["",false, "Where to Call in Case of emergency", "Telephone", "tel"]
         }

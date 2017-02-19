@@ -41,7 +41,13 @@ export default class Groups extends Component{
                         <div className="panel-heading head">{this.props.groupObject.name}</div>
                         <div className="panel-body">
                             Number of Students:{numberOfStudents}
-                            <div><Link to="/index/view-info">Take today's assistance</Link></div>
+                            <div>
+                                {
+                                    numberOfStudents>0?
+                                    <Link to={"/take-assistance/"+this.props.groupObject.id}>
+                                        Take today's assistance</Link>:""
+                                }
+                            </div>
                         </div>
                  </div>
 

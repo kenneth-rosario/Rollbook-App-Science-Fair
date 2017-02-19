@@ -1,5 +1,6 @@
-from app import db, jsonify
-# from sqlalchemy.dialects.postgresql import JSON
+from app import db
+from datetime import datetime
+
 # One to Many Relationship with Group
 # A user or teacher can have many groups in his account but each group corresponds to one specific teacher account
 class Users(db.Model):
@@ -101,8 +102,12 @@ class Students(db.Model):
     def restReturn(self):
         toParent=[]
         grades = []
+        days_missed = []
+        for i in self.days_missed:
+            days_missed.append(i.restReturn)
         for i in self.grades:
             grades.append(i.restReturn)
+        days_missed.sort(key=lambda x: x["date"])
         grades.sort(key=lambda x: x["test"])
         return{
             "id":self.id,
@@ -111,7 +116,8 @@ class Students(db.Model):
             "teacher_id":self.teacher_id,
             "parents":self.parents.restReturn,
             "grades": grades,
-            "group_id": int(self.group_id)
+            "group_id": int(self.group_id),
+            "days_missed": days_missed
         }
 
 class Grades(db.Model):
@@ -134,3 +140,19 @@ class Grades(db.Model):
             "grade":self.grade,
             "student_id":self.student_id
         }
+class Assistance(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
+    date = db.Column(db.DATE)
+    assistance = db.relationship('Students',
+                                 backref="days_missed", lazy="joined", order_by=date )
+    @property
+    def restReturn(self):
+        return {
+            "id":self.id,
+            "student_id":self.student_id,
+            "date":self.date.isoformat()
+        }
+    def __init__(self, student_id, date):
+        self.student_id = student_id,
+        self.date = date

@@ -179,7 +179,46 @@ class StudentManager extends EventEmitter {
             alert("Successful Request")
         })
     }
+    addAssistance(info_object){
+        sessionManager.ShowLoadingPage();
 
+        fetch('/add-assistance',{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(info_object)
+        }).then((response)=>{
+            return response.json()
+        }).then((parsed)=>{
+            localStorage.setItem("jtk", JSON.stringify(parsed));
+            sessionManager.setUser(parsed);
+            alert("Succesful Request");
+            hashHistory.push('/')
+        }).catch(()=>{
+            alert("Error Connecting to Server")
+        });
+        sessionManager.HideLoadingPage()
+    }
+    deleteAssistance(object){
+        console.log(object);
+        fetch('/delete-assistance',{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(object)
+        }).then((response)=>{
+            return response.json()
+        }).then((info)=>{
+            localStorage.setItem('jtk', JSON.stringify(info));
+            sessionManager.setUser(info);
+            alert("Deletion Succesful");
+        }).catch((err)=>{
+            console.log(err);
+            alert("Server Error")
+        })
+    }
     handleAction(action){
         switch(action.type){
             case "CREATE_NEW_STUDENT" :
@@ -191,6 +230,12 @@ class StudentManager extends EventEmitter {
                 break;
             case "DELETE_STUDENT":
                 this.deleteStudent(action.id);
+                break;
+            case "ASSISTANCE":
+                this.addAssistance(action.object);
+                break;
+            case "DELETE_ASSISTANCE":
+                this.deleteAssistance(action.object);
                 break;
         }
     }
