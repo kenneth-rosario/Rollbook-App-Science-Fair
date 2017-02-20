@@ -35,6 +35,11 @@ export default class Navigation extends Component{
             </Navbar.Header>
             <Navbar.Collapse>
                 <Navbar.Text>
+                    <Navbar.Link href="/#/">
+                        Home
+                    </Navbar.Link>
+                </Navbar.Text>
+                <Navbar.Text>
                     <Navbar.Link href="https://github.com/kenneth-rosario/Rollbook-App-Science-Fair" >
                         View Project Repository
                     </Navbar.Link>

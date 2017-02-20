@@ -44,9 +44,16 @@ export default class Groups extends Component{
                             <div>
                                 {
                                     numberOfStudents>0?
-                                    <Link to={"/take-assistance/"+this.props.groupObject.id}>
-                                        Take today's assistance</Link>:""
+                                        (
+                                            <div>
+                                            <Link to={"/take-assistance/"+this.props.groupObject.id}>
+                                        Take today's assistance</Link><br />
+                                                <Link to={"/groups/"+groupId+"/grades"}>View, Create, or Update Grades</Link>
+                                            </div>
+                                        )
+                                        :""
                                 }
+
                             </div>
                         </div>
                  </div>

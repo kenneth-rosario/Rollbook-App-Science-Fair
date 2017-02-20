@@ -39,7 +39,9 @@ export default class IndividualGrade extends Component{
            <div>
             {
                 (!toInput)?
-                <button className="btn btn-link" onClick={() => {
+                <button style={{
+                    color:"white"
+                }} className="btn btn-link" onClick={() => {
                     this.toInput()
                 }}>
                     {this.props.grade}

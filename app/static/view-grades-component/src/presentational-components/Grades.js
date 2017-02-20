@@ -40,8 +40,10 @@ export default class Grades extends Component {
         this.setState({
                     group: groupManager.getGroupById(parseInt(this.props.id)),
                     students:groupManager.filterStudentsFromGroupWithId(
-                        parseInt(this.props.id),this.state.value)
+                        parseInt(this.props.id),this.state.value),
+                    additionalColumns:0
                 });
+
     }
         componentWillMount()
         {

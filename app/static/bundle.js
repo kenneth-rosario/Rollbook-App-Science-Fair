@@ -26992,6 +26992,15 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            _reactBootstrap.Navbar.Link,
+	                            { href: '/#/' },
+	                            'Home'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Navbar.Text,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Navbar.Link,
 	                            { href: 'https://github.com/kenneth-rosario/Rollbook-App-Science-Fair' },
 	                            'View Project Repository'
 	                        )
@@ -49662,9 +49671,19 @@
 	                            'div',
 	                            null,
 	                            numberOfStudents > 0 ? _react2.default.createElement(
-	                                _reactRouter.Link,
-	                                { to: "/take-assistance/" + this.props.groupObject.id },
-	                                'Take today\'s assistance'
+	                                'div',
+	                                null,
+	                                _react2.default.createElement(
+	                                    _reactRouter.Link,
+	                                    { to: "/take-assistance/" + this.props.groupObject.id },
+	                                    'Take today\'s assistance'
+	                                ),
+	                                _react2.default.createElement('br', null),
+	                                _react2.default.createElement(
+	                                    _reactRouter.Link,
+	                                    { to: "/groups/" + groupId + "/grades" },
+	                                    'View, Create, or Update Grades'
+	                                )
 	                            ) : ""
 	                        )
 	                    )
@@ -50823,7 +50842,9 @@
 	                null,
 	                !toInput ? _react2.default.createElement(
 	                    'button',
-	                    { className: 'btn btn-link', onClick: function onClick() {
+	                    { style: {
+	                            color: "white"
+	                        }, className: 'btn btn-link', onClick: function onClick() {
 	                            _this2.toInput();
 	                        } },
 	                    this.props.grade

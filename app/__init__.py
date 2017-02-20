@@ -15,8 +15,9 @@ app.config.update(
     PROPAGATE_EXCEPTIONS=True,
     DEBUG=True,
     MAIL_SERVER="smtp.gmail.com",
-    MAIL_PORT=465,
-    MAIL_USE_SSL=True,
+    MAIL_PORT = 587,
+    MAIL_USE_TLS = True,
+    MAIL_USE_SSL = False,
     MAIL_USERNAME='rollbook.app@gmail.com',
     MAIL_PASSWORD='58pencil3'
 )
