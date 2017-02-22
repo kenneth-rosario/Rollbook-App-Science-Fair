@@ -24,7 +24,7 @@ export default class Login extends Component {
                         <label htmlFor="email">Email:</label>
                         <input id="email" ref="email" className="form-control" />
                         <label  htmlFor="password">Password:</label>
-                        <input id="password" ref="password" className="form-control" />
+                        <input id="password" ref="password" className="form-control" type='password'/>
                         <button className="btn btn-success btn-md" onClick={()=>{this.handleClick()}} style={{margin:15}}>Login</button>
                         <p><Link to="register" >or Register</Link></p>
                     </div>
