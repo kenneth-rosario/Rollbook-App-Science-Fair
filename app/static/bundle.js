@@ -45940,12 +45940,24 @@
 	            return this.logged_in;
 	        }
 	    }, {
+	        key: 'getAuthState',
+	        value: function getAuthState() {
+	            var url = window.location.href;
+	            var second_split = url.split('?');
+	            console.log(second_split);
+	            var third_split = second_split[1].split('#');
+	            console.log(third_split);
+	            var fourth_split = third_split[0].split('&');
+	            console.log(fourth_split);
+	            return fourth_split;
+	        }
+	    }, {
 	        key: 'setUser',
 	        value: function setUser(object) {
 	            console.log("Checking");
 	            this.current_user = object;
 	            localStorage.setItem('jtk', JSON.stringify(object));
-	            this.emit("change");
+	            this.HideLoadingPage();
 	        }
 	    }, {
 	        key: 'LogIn',
@@ -45957,8 +45969,9 @@
 	                "email": email,
 	                "password": password
 	            };
+	            var auth_state = this.getAuthState();
 	            //Fires an Ajax request to the server
-	            fetch('/ajax-login', {
+	            fetch('/ajax-login?' + auth_state, {
 	                method: 'POST',
 	                headers: {
 	                    "Content-Type": 'application/json'
@@ -45970,6 +45983,7 @@
 	                return response.json();
 	            }).then(function (Json) {
 	                //if the above was successful set a cookie and emit change
+
 	                if (Json.status === "SUCCESS") {
 	                    alert("Login successful");
 	                    _this2.current_user = Json;
@@ -48280,6 +48294,7 @@
 	    _createClass(GroupManager, [{
 	        key: 'createGroup',
 	        value: function createGroup(name, id) {
+	            _sessionStore2.default.ShowLoadingPage();
 	            var data_to_send = {
 	                "name": name,
 	                "owner_id": id
@@ -50414,7 +50429,8 @@
 	            console.log("I am here");
 	            this.setState({
 	                group: _groupStore2.default.getGroupById(parseInt(this.props.id)),
-	                students: _groupStore2.default.filterStudentsFromGroupWithId(parseInt(this.props.id), this.state.value)
+	                students: _groupStore2.default.filterStudentsFromGroupWithId(parseInt(this.props.id), this.state.value),
+	                additionalColumns: 0
 	            });
 	        }
 	    }, {
