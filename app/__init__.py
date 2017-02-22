@@ -1,8 +1,9 @@
 from __future__ import print_function
 from flask import Flask, render_template, url_for, request, json, jsonify, session
+from flask import redirect as route_redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
-
+import random,string
 import os
 import sys
 import traceback
@@ -27,8 +28,23 @@ from model import Users, Group, Students, Parents, Grades, Assistance
 
 
 @app.route('/')
+def redirect():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in xrange(32))
+    session["state"] = state
+    print(session, file=sys.stderr)
+    return route_redirect('/index?auth_state=%s'%state)
 @app.route('/index')
 def index():
+    print(session,file=sys.stderr)
+    try:
+        print(request.args.get('auth_state'), file=sys.stderr )
+
+        print(request.args.get('auth_state') == session["state"], file=sys.stderr)
+        if request.args.get('auth_state') != session['state']:
+                return route_redirect('/')
+    except:
+        return route_redirect('/')
     return render_template('roll-book.html')
 
 
@@ -44,6 +60,7 @@ def new_user():
 @app.route('/ajax-login', methods=['POST'])
 def login():
     #Gets Information sent
+    print(session, file=sys.stderr)
     data = json.loads(request.data)
     check = Users.query.filter_by(email=data["email"]).count()
     if check == 1:

@@ -13,6 +13,7 @@ class GroupManager extends EventEmitter {
     }
 
     createGroup(name, id){
+        sessionManager.ShowLoadingPage();
         const data_to_send ={
             "name": name,
             "owner_id": id

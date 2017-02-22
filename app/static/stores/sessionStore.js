@@ -15,11 +15,21 @@ class SessionManager extends EventEmitter {
     isLogedIn(){
         return this.logged_in
     }
+    getAuthState(){
+       let url = window.location.href;
+       let second_split = url.split('?');
+       console.log(second_split);
+       let third_split = second_split[1].split('#');
+       console.log(third_split);
+       let fourth_split = third_split[0].split('&');
+        console.log(fourth_split);
+        return fourth_split
+    }
     setUser(object){
         console.log("Checking");
         this.current_user = object;
         localStorage.setItem('jtk',JSON.stringify(object));
-        this.emit("change")
+        this.HideLoadingPage()
     }
     LogIn(email, password){
         //Prepares the information to be sent
@@ -27,8 +37,9 @@ class SessionManager extends EventEmitter {
             "email":email,
             "password":password
         };
+        let auth_state = this.getAuthState();
         //Fires an Ajax request to the server
-        fetch('/ajax-login',{
+        fetch('/ajax-login?'+auth_state,{
             method:'POST',
             headers:{
                 "Content-Type":'application/json'
@@ -40,6 +51,7 @@ class SessionManager extends EventEmitter {
            return response.json()
         }).then((Json)=>{
             //if the above was successful set a cookie and emit change
+
             if(Json.status === "SUCCESS"){
                 alert("Login successful");
                 this.current_user = Json;

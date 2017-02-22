@@ -47644,7 +47644,7 @@
 	                            { htmlFor: 'password' },
 	                            'Password:'
 	                        ),
-	                        _react2.default.createElement('input', { id: 'password', ref: 'password', className: 'form-control' }),
+	                        _react2.default.createElement('input', { id: 'password', ref: 'password', className: 'form-control', type: 'password' }),
 	                        _react2.default.createElement(
 	                            'button',
 	                            { className: 'btn btn-success btn-md', onClick: function onClick() {
