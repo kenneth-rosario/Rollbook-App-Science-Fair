@@ -47998,21 +47998,25 @@
 	                                { style: { marginLeft: -15 } },
 	                                dangerStudents.map(function (element, key) {
 	                                    return key < 6 && _react2.default.createElement(
-	                                        'li',
+	                                        'div',
 	                                        null,
-	                                        _react2.default.createElement(
-	                                            _reactRouter.Link,
-	                                            { to: "/student-profile/" + element.id
-	                                            },
-	                                            element.name,
-	                                            _react2.default.createElement('br', null),
+	                                        _groupStore2.default.getGroupById(element.group_id) !== undefined && _react2.default.createElement(
+	                                            'li',
+	                                            null,
 	                                            _react2.default.createElement(
-	                                                'b',
-	                                                {
-	                                                    style: { fontSize: 10 } },
-	                                                '(',
-	                                                _groupStore2.default.getGroupById(element.group_id).name,
-	                                                ')'
+	                                                _reactRouter.Link,
+	                                                { to: "/student-profile/" + element.id
+	                                                },
+	                                                element.name,
+	                                                _react2.default.createElement('br', null),
+	                                                _react2.default.createElement(
+	                                                    'b',
+	                                                    {
+	                                                        style: { fontSize: 10 } },
+	                                                    '(',
+	                                                    _groupStore2.default.getGroupById(element.group_id).name,
+	                                                    ')'
+	                                                )
 	                                            )
 	                                        )
 	                                    );
@@ -48680,7 +48684,6 @@
 	                return response.json();
 	            }).then(function (data) {
 	                if (data.status === "SUCCESS") {
-	                    localStorage.setItem('jtk', JSON.stringify(data));
 	                    _sessionStore2.default.setUser(data);
 	                } else {
 	                    alert("apparently something went wrong in the server");

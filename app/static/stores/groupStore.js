@@ -240,7 +240,6 @@ class GroupManager extends EventEmitter {
             return response.json()
         }).then((data)=>{
             if(data.status === "SUCCESS"){
-                localStorage.setItem('jtk', JSON.stringify(data));
                 sessionManager.setUser(data)
             }else{
                 alert("apparently something went wrong in the server")

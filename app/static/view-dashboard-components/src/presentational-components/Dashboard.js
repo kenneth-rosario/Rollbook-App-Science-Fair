@@ -119,9 +119,21 @@ export default class DashBoard extends Component {
                                 {
                                     dangerStudents.map((element, key) => {
                                         return key < 6 &&
-                                                    (<li><Link to={"/student-profile/" + element.id}
-                                                >{element.name}<br /><b
-                                                        style={{fontSize: 10}}>({groupManager.getGroupById(element.group_id).name})</b></Link></li>)
+                                                    (
+                                                        <div>
+                                                        {
+                                                            groupManager.getGroupById(element.group_id) !== undefined &&
+                                                            (<li><Link to={"/student-profile/" + element.id}
+                                        >{element.name}<br /><b
+                                            style={{fontSize: 10}}>
+                                            ({groupManager.getGroupById(element.group_id).name})
+                                        </b>
+                                        </Link>
+                                        </li>)
+                                                }
+                                                        </div>
+                                        )
+
                                     })
                                 }
                             </ul>
