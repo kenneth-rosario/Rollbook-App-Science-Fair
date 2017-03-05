@@ -52,6 +52,27 @@ class GroupManager extends EventEmitter {
 
         }return students
     }
+    importGroups(formData){
+        let data = new FormData(formData);
+        data.append("user_id", sessionManager.getCurrentUser().id);
+        console.log(data);
+        sessionManager.ShowLoadingPage();
+        fetch('/upload-excel', {
+            method:"POST",
+            body:data
+        }).then((response)=>{
+            return response.json()
+        }).then((Json)=>{
+            if(Json.status === "FAILED"){
+                sessionManager.HideLoadingPage();
+                alert(Json.reason)
+            }else if(Json.status==="SUCCESS") {
+                sessionManager.setUser(Json);
+                alert("Import Successful");
+            }
+        });
+
+    }
     getAllDangerStudents(){
        let toReturn = [];
        let groups = this.getAll();
@@ -237,6 +258,9 @@ class GroupManager extends EventEmitter {
                 break;
             case "DELETE_GROUP":
                 this.deleteGroup(action.id,action.owner_id);
+                break;
+            case "IMPORT_GROUPS":
+                this.importGroups(action.formData)
                 break;
         }
     }

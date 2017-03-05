@@ -141,7 +141,7 @@ export default class Grades extends Component {
                     !this.state.disable&&this.addColumn()
                 }} className={ !this.state.disable?
                     "btn btn-primary col-xs-2":"btn btn-primary disabled"
-                }>Add new Column</button>
+                }>Add new Grade</button>
                 <RemovePrompt
                     grades={this.state.group.students[0].grades}
                     id={this.props.id}
@@ -191,7 +191,7 @@ export default class Grades extends Component {
                 <button onClick={()=>{
                     this.props.ajaxCall()
                 }} className="btn btn-success col-xs-4"
-                >Add New Grades</button>
+                >Save Grades</button>
 
             </div>
         )

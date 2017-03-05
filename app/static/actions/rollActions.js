@@ -41,7 +41,12 @@ export function deleteAssistance (object){
         object: object
     })
 }
-
+export function importGroups (formData){
+    dispatcher.dispatch({
+        type:"IMPORT_GROUPS",
+        formData: formData
+    })
+}
 export function createStudent(name, email, toGroup, father = false ,Pemail=false, Telephone=false){
     console.log("dispatching createStudent action");
     console.log("dispatching action");

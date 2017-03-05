@@ -54,10 +54,9 @@ class SessionManager extends EventEmitter {
 
             if(Json.status === "SUCCESS"){
                 alert("Login successful");
-                this.current_user = Json;
                 this.logged_in = true;
                 localStorage.setItem('jtk', JSON.stringify(Json));
-                this.HideLoadingPage();
+                this.setUser(Json)
             }else{
                 alert("wrong credentials");
                 this.HideLoadingPage();

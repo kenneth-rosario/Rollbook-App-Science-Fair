@@ -124,22 +124,7 @@ export default class StudentProfile extends Component {
                 <br />
                 <div className="col-xs-12">
                     <br />
-
                 </div>
-                    {/*<Performance
-                        id = {parseInt(this.props.params.id)}
-                    />*/}
-                {/*<div className="col-xs-12">
-                    <DataTable
-                        id = {parseInt(this.props.params.id)}
-                    />
-                </div>*/}
-                <br />
-                {/*<div className="col-xs-12">
-                    <ScoreNeeded
-                        id = {parseInt(this.props.params.id)}
-                    />
-                </div>*/}
                 <div className="col-xs-12">
                     <EmailParent
                         group={group.name}

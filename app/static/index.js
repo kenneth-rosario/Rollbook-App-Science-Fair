@@ -14,6 +14,8 @@ import GradesContainer from './view-grades-component/src/container-components/Gr
 import StudentProfile from './view-student-interactivity/src/presentational-components/Profile'
 import MainView from './view-statistics-interactivity/src/presentational-components/MainVIew'
 import Assistance from './view-asistance-components/src/MainView'
+import ImportGroups from './view-dashboard-components/src/presentational-components/Import-groups/ImportGroups'
+import AllDangerStudents from './view-student-interactivity/src/presentational-components/AllDangerStudents'
 
 class DashOrLog extends Component{
     constructor(){
@@ -64,6 +66,8 @@ class Routing extends Component {
                     <Route path="/student-profile/:id" component={StudentProfile}/>
                     <Route path="/group-statistics" component={MainView}/>
                     <Route path="/take-assistance/:id" component={Assistance} />
+                    <Route path="/import-group" component ={ImportGroups} />
+                    <Route path="/view-danger-students" component={AllDangerStudents} />
                 </Route>
                 <Route path="register" component={RegisterContainer} />
                 <Route path="groups/:id/grades" component={GradesContainer} >

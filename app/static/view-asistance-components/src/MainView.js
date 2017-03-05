@@ -42,7 +42,8 @@ export default class Assistance extends Component{
                    <blockquote> <p>m/d/y</p>
                     <h4>{date.getMonth()+1+"/"+date.getDate()+"/"+date.getFullYear()}</h4>
                    </blockquote>
-                <table id="assistance" className="table table-bordered table-responsive" style={style}>
+                <div style={style}>
+                <table id="assistance" className="table table-bordered table-responsive" >
                     <thead>
                         <tr>
                             <td>Student Id</td>
@@ -59,6 +60,7 @@ export default class Assistance extends Component{
                     }
                     </tbody>
                 </table>
+                </div>
                 <button className="btn btn-success" onClick={()=>{
                     this.submitTable()
                 }}>

@@ -59,6 +59,13 @@ export default class DashBoard extends Component {
                 }
             },
             {
+                title:"Import Group",
+                href:"/import-group",
+                onClick: ()=>{
+                    console.log("nothing");
+                }
+            },
+            {
                 title:"Add Student",
                 href:"",
                 onClick:()=>{
@@ -79,7 +86,8 @@ export default class DashBoard extends Component {
                 onClick: ()=>{
                     console.log("clear for now")
                 }
-            }
+            },
+
         ];
         let dangerStudents = this.state.dangerStudent?this.state.dangerStudent:[];
         return (
@@ -104,20 +112,24 @@ export default class DashBoard extends Component {
                     {this.props.data}
                 </div>
                 <div className="col-sm-2">
-                    <div className="panel panel-danger">
+                    <div className="panel panel-danger" id="removepanel">
                         <div className="panel-heading">Students with performance D or F</div>
-                        <div className="panel-body">{
+                        <div className="panel-body">
                             <ul style={{marginLeft:-15}}>
                                 {
                                     dangerStudents.map((element, key) => {
-                                        return (<li key={key}>
-                                            <Link to={"/student-profile/"+element.id}
-                                            >{element.name}<br /><b style={{fontSize:10}}>({groupManager.getGroupById(element.group_id).name})</b></Link>
-                                        </li>);
+                                        return key < 6 &&
+                                                    (<li><Link to={"/student-profile/" + element.id}
+                                                >{element.name}<br /><b
+                                                        style={{fontSize: 10}}>({groupManager.getGroupById(element.group_id).name})</b></Link></li>)
                                     })
                                 }
                             </ul>
-                        }</div>
+                                {
+                                    dangerStudents.length > 5&&
+                                        <Link to="/view-danger-students">View All</Link>
+                                }
+                        </div>
                     </div>
                 </div>
             </div>

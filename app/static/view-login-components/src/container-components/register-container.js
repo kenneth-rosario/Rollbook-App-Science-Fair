@@ -22,6 +22,10 @@ export default class RegisterContainer extends Component{
             "password": document.getElementById('password').value,
             "school": document.getElementById('school').value
         };
+        if(newUser.password !== document.getElementById('confirmPass').value){
+            alert('passwords do not match');
+            return null
+        }
         console.log(newUser);
         for (let ii in newUser) {
             if (newUser[ii].length === 0) {
