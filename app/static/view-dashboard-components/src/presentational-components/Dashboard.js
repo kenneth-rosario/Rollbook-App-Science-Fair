@@ -56,14 +56,16 @@ export default class DashBoard extends Component {
                 href:"",
                 onClick:()=>{
                    this.open("CREATE_NEW_GROUP");
-                }
+                },
+                className:" glyphicon glyphicon-apple "
             },
             {
                 title:"Import Group",
                 href:"/import-group",
                 onClick: ()=>{
                     console.log("nothing");
-                }
+                },
+                className:" glyphicon glyphicon-cloud-upload "
             },
             {
                 title:"Add Student",
@@ -71,21 +73,24 @@ export default class DashBoard extends Component {
                 onClick:()=>{
                     console.log("clicked");
                     this.open("CREATE_NEW_STUDENT");
-                }
+                },
+                className:" glyphicon glyphicon-plus "
             },
             {
                 title: "Your Information",
                 href: "/index/view-info",
                 onClick: () => {
                     console.log("clear for now")
-                }
+                },
+                className: " glyphicon glyphicon-folder-open "
             },
             {
                 title:"Group Statistics",
                 href:"/group-statistics",
                 onClick: ()=>{
                     console.log("clear for now")
-                }
+                },
+                className: " glyphicon glyphicon-object-align-bottom "
             },
 
         ];
@@ -100,7 +105,8 @@ export default class DashBoard extends Component {
                     }>
                         {buttons.map((button, key)=>{
                             return( <MyButton
-                              key={key} href={button.href} title={button.title}
+                              key={key} className={button.className}
+                              href={button.href} title={button.title}
                               onClick={()=>{button.onClick()}}
                             />);
                         })}

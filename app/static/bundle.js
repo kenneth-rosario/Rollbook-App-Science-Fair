@@ -47926,32 +47926,37 @@
 	                href: "",
 	                onClick: function onClick() {
 	                    _this2.open("CREATE_NEW_GROUP");
-	                }
+	                },
+	                className: " glyphicon glyphicon-apple "
 	            }, {
 	                title: "Import Group",
 	                href: "/import-group",
 	                onClick: function onClick() {
 	                    console.log("nothing");
-	                }
+	                },
+	                className: " glyphicon glyphicon-cloud-upload "
 	            }, {
 	                title: "Add Student",
 	                href: "",
 	                onClick: function onClick() {
 	                    console.log("clicked");
 	                    _this2.open("CREATE_NEW_STUDENT");
-	                }
+	                },
+	                className: " glyphicon glyphicon-plus "
 	            }, {
 	                title: "Your Information",
 	                href: "/index/view-info",
 	                onClick: function onClick() {
 	                    console.log("clear for now");
-	                }
+	                },
+	                className: " glyphicon glyphicon-folder-open "
 	            }, {
 	                title: "Group Statistics",
 	                href: "/group-statistics",
 	                onClick: function onClick() {
 	                    console.log("clear for now");
-	                }
+	                },
+	                className: " glyphicon glyphicon-object-align-bottom "
 	            }];
 	            var dangerStudents = this.state.dangerStudent ? this.state.dangerStudent : [];
 	            return _react2.default.createElement(
@@ -47964,7 +47969,8 @@
 	                        } },
 	                    buttons.map(function (button, key) {
 	                        return _react2.default.createElement(_button2.default, {
-	                            key: key, href: button.href, title: button.title,
+	                            key: key, className: button.className,
+	                            href: button.href, title: button.title,
 	                            onClick: function onClick() {
 	                                button.onClick();
 	                            }
@@ -48089,7 +48095,10 @@
 	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
-	                        this.props.title
+	                        _react2.default.createElement('span', { className: this.props.className }),
+	                        ' ',
+	                        this.props.title,
+	                        ' '
 	                    )
 	                )
 	            );
