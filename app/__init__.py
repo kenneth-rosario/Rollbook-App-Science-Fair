@@ -1,7 +1,9 @@
 from __future__ import print_function
+from customHelperModules import first_row_excel_length
 from flask import Flask, render_template, url_for, request, json, jsonify, session
 from flask import redirect as route_redirect
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+import flask_excel as excel
 from datetime import datetime
 import random,string
 import os
@@ -13,14 +15,12 @@ app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config.update(
-    PROPAGATE_EXCEPTIONS=True,
-    DEBUG=True,
     MAIL_SERVER="smtp.gmail.com",
     MAIL_PORT = 587,
     MAIL_USE_TLS = True,
     MAIL_USE_SSL = False,
     MAIL_USERNAME='rollbook.app@gmail.com',
-    MAIL_PASSWORD='58pencil3'
+    MAIL_PASSWORD='--------'
 )
 mail = Mail(app)
 db = SQLAlchemy(app)
@@ -344,3 +344,101 @@ def delete_assistance():
         e = sys.exc_info()
         traceback.print_exception(*e)
         return "Error Sending message"
+
+@app.route('/upload-excel', methods=["POST"])
+def upload():
+    data = request.get_array(field_name="file")
+    user_id = request.form["user_id"]
+    ##First check; Does the first row contain just one column and if so is that group name
+    ## taken in his account?
+    print(data[0], file=sys.stderr)
+    try:
+        if first_row_excel_length(data[0])== 1:
+            check_group = Group.query.filter_by(name=data[0][0], owner_id=user_id).count()
+            if check_group == 0:
+                new_group = Group(name=data[0][0], owner_id=int(user_id))
+                db.session.add(new_group)
+                db.session.flush()
+            else:
+                return jsonify({
+                    "status":"FAILED",
+                    "reason":"The Name given to the group already exists in your account"
+                })
+            ##Second Check: check that the length of the second row equals 5
+            if first_row_excel_length(data[1])== 5:
+                #We will now add the entries to the data base
+                destination_group = Group.query.filter_by(name=data[0][0],
+                                                          owner_id=user_id).one()
+                emails_used = []
+                email_info_objects = []
+                for indx, value in enumerate(data):
+                    if indx == 0 or indx == 1:
+                        continue
+                    else:
+                        #Check if parent information exists
+                        check_parent = Parents.query.filter_by(email=value[4]).count()
+                        the_parent_id = None
+                        if check_parent == 1 :
+                            parent = Parents.query.filter_by(email = value[4]).one()
+                            if value[2] == parent.name:
+                                the_parent_id = parent.id
+                                print(str(the_parent_id), file=sys.stderr)
+                            else:
+                                return jsonify({
+                                    "status":"FAILED",
+                                    "reason":"parent email in row "+ str(indx+1)+" is already in "
+                                                                                 "use"
+                                })
+                        else:
+                            new_parent = Parents(name=value[2], email=value[4], telephone=value[3])
+                            db.session.add(new_parent)
+                            db.session.flush()
+                            the_parent_id = Parents.query.filter_by(email=value[4]).one().id
+                        ## Now we must add the student
+                        print(value[1] in emails_used, file=sys.stderr)
+                        if value[1] not in emails_used:
+                            new_student = Students(name=value[0], email=value[1], parent_id=the_parent_id, teacher_id=user_id, group_id=destination_group.id)
+                            db.session.add(new_student)
+                            db.session.flush()
+                            emails_used.append(value[1])
+                            email_info_objects.append({
+                                "row":indx + 1,
+                                "email":value[1]
+                            })
+                            print(emails_used, file=sys.stderr)
+                        else:
+                            the_index_email = emails_used.index(value[1])
+                            print("Inside else", file=sys.stderr)
+                            print(emails_used[the_index_email], file=sys.stderr)
+                            return jsonify({
+                                "status":"FAILED",
+                                "reason":"the student email in row: "+str(indx + 1)+" "
+                                                                                "already exists in row: "+ str(email_info_objects[the_index_email]["row"])
+                            })
+                db.session.commit()
+                user = Users.query.filter_by(id=int(user_id)).one().restReturn
+                user.update({
+                    "status":"SUCCESS"
+                })
+                return jsonify(user)
+
+            else:
+                return jsonify({
+                    "status":"FAILED",
+                    "reason": "The header should be of length 5; found "
+                            + str(first_row_excel_length(data[1]))
+        })
+        else:
+            return jsonify({
+                "status":"FAILED",
+                "reason":"First Row in excel document should contain only one column, instead found "
+                         +str(first_row_excel_length(data[0]))
+            })
+    except:
+        e = sys.exc_info()
+        traceback.print_exception(*e)
+        return "Error Sending message"
+
+@app.route('/view-excel-guidelines')
+def guidelines():
+    return render_template('excel-template.html')

@@ -17,6 +17,8 @@ class Users(db.Model):
         newObjects = []
         for i in groups:
             newObjects.append(i.restReturn)
+        newObjects.sort(key= lambda x:x["number_of_students"],
+                        reverse=True)
         return{
             "id": self.id,
             "email": self.email,
@@ -60,7 +62,6 @@ class Group(db.Model):
     users = db.relationship('Users',backref="group", lazy="joined")
 
     def __init__(self, owner_id, name):
-
         self.owner_id = owner_id
         self.name = name
 
@@ -75,7 +76,8 @@ class Group(db.Model):
             "id": self.id,
             "name": self.name,
             "owner_id": self.owner_id,
-            "students": newObjects
+            "students": newObjects,
+            "number_of_students": len(self.students)
         }
 # One to many relationship between Students and Grade
 # A student can have many grades but a grade can only belong to one specific student
